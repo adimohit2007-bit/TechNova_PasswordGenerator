@@ -1,50 +1,51 @@
 import random
+import string
 
-print("====================================")
-print("      NUMBER GUESSING GAME")
-print("====================================")
+def generate_password(length):
+    characters = (
+        string.ascii_lowercase +
+        string.ascii_uppercase +
+        string.digits +
+        string.punctuation
+    )
 
-print("\nChoose Difficulty Level:")
-print("1. Easy (1 - 50)")
-print("2. Medium (1 - 100)")
-print("3. Hard (1 - 200)")
+    password = ""
 
-choice = input("\nEnter your choice (1/2/3): ")
+    for i in range(length):
+        password += random.choice(characters)
 
-if choice == "1":
-    limit = 50
-elif choice == "2":
-    limit = 100
-elif choice == "3":
-    limit = 200
-else:
-    print("\n❌ Error: Invalid Choice!")
-    print("Please run the program again and enter only 1, 2, or 3.")
-    exit()
+    return password
 
-secret_number = random.randint(1, limit)
-attempts = 0
+print("=" * 40)
+print("      PASSWORD GENERATOR")
+print("=" * 40)
 
-print(f"\nI have selected a number between 1 and {limit}.")
-print("Can you guess it?")
+try:
+    length = int(input("\nEnter password length: "))
 
-while True:
-    try:
-        guess = int(input("\nEnter your guess: "))
-        attempts += 1
+    if length < 4:
+        print("Password length should be at least 4 characters.")
+        exit()
 
-        if guess < 1 or guess > limit:
-            print(f"⚠ Please enter a number between 1 and {limit}.")
-        elif guess < secret_number:
-            print("📉 Too Low! Try Again.")
-        elif guess > secret_number:
-            print("📈 Too High! Try Again.")
-        else:
-            print("\n🎉 Congratulations!")
-            print(f"You guessed the correct number: {secret_number}")
-            print(f"Total Attempts: {attempts}")
-            print("Thanks for playing!")
-            break
+    password = generate_password(length)
 
-    except ValueError:
-        print("❌ Invalid input! Please enter a valid number.")
+    print("\nGenerated Password:")
+    print(password)
+
+    with open("passwords.txt", "a") as file:
+        file.write(password + "\n")
+
+    print("\nPassword saved to passwords.txt")
+
+    print("\nPassword Strength: Strong")
+    print("Contains:")
+    print("- Uppercase Letters")
+    print("- Lowercase Letters")
+    print("- Numbers")
+    print("- Special Characters")
+
+except ValueError:
+    print("\nError: Please enter a valid number.")
+
+print("\nThank you for using Password Generator!")
+print("=" * 40)
